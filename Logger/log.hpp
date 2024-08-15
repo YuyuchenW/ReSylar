@@ -5,6 +5,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <unordered_map>
 #include "../Utility/cmutex.hpp"
 
 namespace sylar
@@ -64,7 +65,7 @@ namespace sylar
         /// @param threadName 线程名称
         /// @param time UTC时间
         LogEvent(const std::string &loggerName, LogLevel::Level level,
-                 const char *file, int32_t line, uint64_t elapse, uint64_t threadId, uint32_t fiberId, uint64_t threadName, time_t time);
+                 const char *file, int32_t line, uint64_t elapse, uint64_t threadId, uint32_t fiberId, const std::string &threadName, time_t time);
 
         const std::string &getLoggerName() const { return m_loggerName; }
         const LogLevel::Level &getLoggerLevel() const { return m_level; }
@@ -72,10 +73,12 @@ namespace sylar
         const int32_t &geteLine() const { return m_line; }
         const uint64_t &getElapse() const { return m_elapse; }
         const uint64_t &getThreadId() const { return m_threadId; }
-
+        std::string getContent() const { return m_ss.str(); }
         const uint32_t &getFiberId() const { return m_fiberId; }
         const std::string &getThreadName() const { return m_threadName; }
         const time_t &getTime() const { return m_time; }
+
+        const LogLevel::Level &getLevel() { return m_level; }
         const std::stringstream &getStringStream() { return m_ss; };
 
         /// @brief 写入日志，使用printf风格格式
@@ -170,7 +173,7 @@ namespace sylar
             /// @brief 析构函数
             virtual ~FormatterItem() {};
 
-            virtual std::string format(std::ostream &os, LogEvent::ptr) = 0;
+            virtual void format(std::ostream &os, LogEvent::ptr) = 0;
         };
 
     private:
@@ -186,7 +189,7 @@ namespace sylar
     {
     public:
         typedef std::shared_ptr<LogAppender> ptr;
-        // TODO 加锁
+        typedef Spinlock MutexType;
 
         /// @brief 构造函数
         /// @param formatter 默认格式器
@@ -202,9 +205,152 @@ namespace sylar
         virtual std::string toYamlString() = 0;
 
     protected:
+        MutexType m_mutex;
         LogFormatter::ptr m_defaultFormatter;
         LogFormatter::ptr m_formatter;
     };
+
+    /// @brief 输出到控制台
+    class StdoutLogAppender : public LogAppender
+    {
+    public:
+        typedef std::shared_ptr<StdoutLogAppender> ptr;
+
+        /// @brief 构造函数
+        StdoutLogAppender();
+
+        /// @brief 析构函数
+        virtual ~StdoutLogAppender() {};
+
+        void log(LogEvent::ptr event) override;
+
+        std::string toYamlString() override;
+    };
+
+    /// @brief 输出到文件
+    class FileLogAppender : public LogAppender
+    {
+    public:
+        typedef std::shared_ptr<FileLogAppender> ptr;
+
+        /// @brief 构造函数
+        /// @param path 文件路径
+        FileLogAppender(const std::string &path);
+
+        void log(LogEvent::ptr event) override;
+
+        std::string toYamlString() override;
+
+        bool reOpen();
+
+    private:
+        /// 文件路径
+        std::string m_path;
+        /// 文件流
+        std::ofstream m_filestream;
+        /// 上次重打打开时间
+        uint64_t m_lastTime = 0;
+        /// 文件打开错误标识
+        bool m_reopenError = false;
+    };
+
+    /// @brief 日志器
+    class Logger
+    {
+    public:
+        typedef std::shared_ptr<Logger> ptr;
+        typedef Spinlock MutexType;
+
+        /// @brief 构造函数
+        /// @param name 日志名称
+        Logger(const std::string &name = "root");
+
+        /// @brief 获取日志器创建时间
+        /// @return 时间戳
+        const uint64_t &getCreateTime() const { return m_createTime; }
+
+        /// @brief 获取日志器名
+        /// @return 日志器名称
+        const std::string &getName() const { return m_name; }
+
+        /// @brief 获取日志器等级
+        /// @return 日志器等级
+        const LogLevel::Level &getLevel() const { return m_level; }
+        /// @brief 设置日志器等级
+        /// @param level 日志等级
+        void setLevel(LogLevel::Level level) { m_level = level; }
+
+        /// @brief 添加日志输出地
+        /// @param appender 日志输出目标
+        void addAppender(LogAppender::ptr appender);
+
+        /// @brief 删除目的输出目标
+        /// @param appender 日志输出目标
+        void delAppender(LogAppender::ptr appender);
+
+        /// @brief 清空日志输出目标
+        void clearAppenders();
+        /// @brief 写日志
+        /// @param event 事件
+        void log(LogEvent::ptr event);
+
+        std::string toYamlString();
+
+    private:
+        /// mutex
+        MutexType m_mutex;
+        /// 日志器名字
+        std::string m_name;
+        /// 日志级别
+        LogLevel::Level m_level;
+        /// 日志输出列表
+        std::list<LogAppender::ptr> m_appenders;
+        /// 日志创建时间
+        uint64_t m_createTime;
+    };
+
+    /// @brief 日志事件包装器，方便宏定义，内部包含日志事件和日志器
+    class LoggerWrap
+    {
+    public:
+        /// @brief 构造函数
+        /// @param logger 日志器
+        /// @param event 日志事件
+        LoggerWrap(Logger::ptr logger, LogEvent::ptr event);
+
+        /// @brief 析构函数
+        /// @details 日志器在析构时进行输出
+        ~LoggerWrap();
+
+        LogEvent::ptr getLogEvent() const { return m_event; }
+
+    private:
+        Logger::ptr m_logger;
+        LogEvent::ptr m_event;
+    };
+
+    /// @brief 日志管理器
+    class LogManager
+    {
+    public:
+        typedef Spinlock MutexType;
+        /// @brief 构造函数
+        LogManager();
+        Logger::ptr getLogger(const std::string &name);
+
+        /// @brief 初始化，从配置文件中加载日志配置
+        void init();
+        std::string toYamlString();
+        Logger::ptr getRoot() { return m_root; }
+
+    private:
+        MutexType m_mutex;
+        /// 日志器集合 name - logger
+        std::unordered_map<std::string, Logger::ptr> m_loggers;
+        /// 根日志器
+        Logger::ptr m_root;
+    };
+
 };
 
 #endif
