@@ -232,6 +232,7 @@ namespace sylar
     class Spinlock : Noncopyable
     {
     public:
+        typedef ScopedLockImpl<Spinlock> Lock;
         /// @brief 构造函数
         Spinlock()
         {

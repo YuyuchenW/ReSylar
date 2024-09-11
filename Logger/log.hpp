@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <unordered_map>
+#include <map>
 #include "../Utility/cmutex.hpp"
 
 namespace sylar
@@ -77,7 +78,7 @@ namespace sylar
         const uint32_t &getFiberId() const { return m_fiberId; }
         const std::string &getThreadName() const { return m_threadName; }
         const time_t &getTime() const { return m_time; }
-
+        const int32_t &getLine() const { return m_line; }
         const LogLevel::Level &getLevel() { return m_level; }
         const std::stringstream &getStringStream() { return m_ss; };
 
