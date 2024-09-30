@@ -1,4 +1,4 @@
-CMakeFiles/unique_ptr.dir/test/ptr_test.cpp.o: \
+CMakeFiles/ptr_test.dir/test/ptr_test.cpp.o: \
  /home/cxs/Sylar/test/ptr_test.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/11/cstdio \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \

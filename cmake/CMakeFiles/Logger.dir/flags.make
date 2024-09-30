@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = 
+CXX_INCLUDES = -I/home/cxs/Sylar/Logger -I/home/cxs/Sylar/ptr -I/home/cxs/Sylar/Utility
 
 CXX_FLAGS = -std=gnu++17
 

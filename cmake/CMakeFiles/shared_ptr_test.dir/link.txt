@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/shared_ptr_test.dir/test/shared_ptr_test.cpp.o -o shared_ptr_test  libLogger.a libUtility.a 

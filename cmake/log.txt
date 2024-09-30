@@ -1,0 +1,2 @@
+2024-09-30 11:14:02 [1000ms]	594434	brand_new_threa	0	[FATAL]	[root]	/home/cxs/Sylar/test/test_logger.cc:16	fatal msg
+2024-09-30 11:14:02 [1000ms]	594434	brand_new_threa	0	[ERROR]	[root]	/home/cxs/Sylar/test/test_logger.cc:17	err msg

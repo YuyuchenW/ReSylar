@@ -1,3 +1,7 @@
-/home/cxs/Sylar/cmake/CMakeFiles/unique_ptr.dir
+/home/cxs/Sylar/cmake/CMakeFiles/Logger.dir
+/home/cxs/Sylar/cmake/CMakeFiles/Utility.dir
+/home/cxs/Sylar/cmake/CMakeFiles/ptr_test.dir
+/home/cxs/Sylar/cmake/CMakeFiles/shared_ptr_test.dir
+/home/cxs/Sylar/cmake/CMakeFiles/test_logger.dir
 /home/cxs/Sylar/cmake/CMakeFiles/edit_cache.dir
 /home/cxs/Sylar/cmake/CMakeFiles/rebuild_cache.dir

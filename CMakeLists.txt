@@ -1,23 +1,25 @@
-cmake_minimum_required(VERSION 3.10) # 指定最小版本
-project(Sylar VERSION 1.0)          # 定义项目名称和版本
+cmake_minimum_required(VERSION 3.10) # 设置所需的最低CMake版本
+project(Sylar VERSION 1.0) # 定义项目的名称和版本号
 
-# 设置编译器标志
+# 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# 添加子目录
-# add_subdirectory(Logger)
-# add_subdirectory(Utility)
-# add_subdirectory(ptr)
-# add_subdirectory(test)
-# 添加可执行文件
-# add_executable(sylar_logger Logger/log.cc)
-# target_include_directories(sylar_logger PRIVATE Logger)
+# 包含目录
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Logger)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ptr)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Utility)
 
-# add_executable(sylar_utility Utility/cmutex.cc)
-# target_include_directories(sylar_utility PRIVATE Utility)
-set(SYLAR_SRC 
-    cunique_ptr.hpp
-)
+# 添加库
+add_library(Logger STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Logger/log.cc)
+add_library(Utility STATIC ${CMAKE_CURRENT_SOURCE_DIR}/Utility/cmutex.cc ${CMAKE_CURRENT_SOURCE_DIR}/Utility/util.cpp)
 
-add_executable(unique_ptr  test/ptr_test.cpp)
+# 添加测试可执行文件
+add_executable(ptr_test ${CMAKE_CURRENT_SOURCE_DIR}/test/ptr_test.cpp)
+target_link_libraries(ptr_test PRIVATE Logger Utility)
+
+add_executable(shared_ptr_test ${CMAKE_CURRENT_SOURCE_DIR}/test/shared_ptr_test.cpp)
+target_link_libraries(shared_ptr_test PRIVATE Logger Utility)
+
+add_executable(test_logger ${CMAKE_CURRENT_SOURCE_DIR}/test/test_logger.cc)
+target_link_libraries(test_logger PRIVATE Logger Utility)

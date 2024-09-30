@@ -1,0 +1,2 @@
+/usr/bin/ar qc libUtility.a CMakeFiles/Utility.dir/Utility/cmutex.cc.o CMakeFiles/Utility.dir/Utility/util.cpp.o
+/usr/bin/ranlib libUtility.a

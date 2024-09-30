@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/test_logger.dir/test/test_logger.cc.o -o test_logger  libLogger.a libUtility.a 

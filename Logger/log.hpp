@@ -8,6 +8,41 @@
 #include <unordered_map>
 #include <map>
 #include "../Utility/cmutex.hpp"
+#include "../Utility/singleton.h"
+#include "../Utility/util.h"
+// 获取root日志器
+#define SYLAR_LOG_ROOT() sylar::LoggerMgr::GetInstance()->getRoot()
+
+// 获取指定日志器
+#define SYLAR_LOG(name) sylar::LoggerMgr::GetInstance()->getLogger(name)
+/**
+ * @brief 使用流式方式将日志级别level的日志写入到logger
+ * @details 构造一个LoggerWrap对象，包裹包含日志器和日志事件，在对象析构时调用日志器写日志事件
+ * @todo 协程id未实现，暂时写0
+ */
+#define SYLAR_LOG_LEVEL(logger, level)                                                                                                               \
+    if (level <= logger->getLevel())                                                                                                                 \
+    sylar::LoggerWrap(logger, sylar::LogEvent::ptr(new sylar::LogEvent(logger->getName(),                                                            \
+                                                                       level, __FILE__, __LINE__, sylar::GetElapsedMS() - logger->getCreateTime(),   \
+                                                                       sylar::GetThreadId(), sylar::GetFiberId(), sylar::GetThreadName(), time(0)))) \
+        .getLogEvent()                                                                                                                               \
+        ->getSS()
+
+#define SYLAR_LOG_FATAL(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::FATAL)
+
+#define SYLAR_LOG_ALERT(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::ALERT)
+
+#define SYLAR_LOG_CRIT(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::CRIT)
+
+#define SYLAR_LOG_ERROR(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::ERROR)
+
+#define SYLAR_LOG_WARN(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::WARN)
+
+#define SYLAR_LOG_NOTICE(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::NOTICE)
+
+#define SYLAR_LOG_INFO(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::INFO)
+
+#define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::DEBUG)
 
 namespace sylar
 {
@@ -66,7 +101,9 @@ namespace sylar
         /// @param threadName 线程名称
         /// @param time UTC时间
         LogEvent(const std::string &loggerName, LogLevel::Level level,
-                 const char *file, int32_t line, uint64_t elapse, uint64_t threadId, uint32_t fiberId, const std::string &threadName, time_t time);
+                 const char *file, int32_t line, uint64_t elapse,
+                 uint64_t threadId, uint32_t fiberId,
+                 const std::string &threadName, time_t time);
 
         const std::string &getLoggerName() const { return m_loggerName; }
         const LogLevel::Level &getLoggerLevel() const { return m_level; }
@@ -81,6 +118,8 @@ namespace sylar
         const int32_t &getLine() const { return m_line; }
         const LogLevel::Level &getLevel() { return m_level; }
         const std::stringstream &getStringStream() { return m_ss; };
+
+        std::stringstream &getSS() { return m_ss; }
 
         /// @brief 写入日志，使用printf风格格式
         /// @param fmt 格式模板
@@ -199,7 +238,7 @@ namespace sylar
         /// @brief 析构函数
         virtual ~LogAppender() {};
         void setFormatter(LogFormatter::ptr formatter);
-        LogFormatter::ptr getFormatter() { return m_formatter; }
+        LogFormatter::ptr getFormatter();
 
         virtual void log(LogEvent::ptr event) = 0;
 
@@ -351,6 +390,9 @@ namespace sylar
         /// 根日志器
         Logger::ptr m_root;
     };
+
+    /// 日志器管理类单例
+    typedef sylar::Singleton<LogManager> LoggerMgr;
 
 };
 

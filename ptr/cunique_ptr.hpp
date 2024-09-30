@@ -47,7 +47,7 @@ public:
     explicit CUniquePtr(T *ptr = nullptr) noexcept : m_ptr(ptr) {}
 
     /// 从子类型U转换为T类型的智能指针
-    template <class U, class UD, class = std::enable_if_t<std::is_convertible_v<U *, T *>>>
+    template <class U, class UD, class = class std::enable_if<std::is_convertible<U *, T *>::value>::type>
     CUniquePtr(CUniquePtr<U, UD> &&other) noexcept : m_ptr(other.m_ptr)
     {
         other.m_ptr = nullptr;
@@ -119,4 +119,5 @@ public:
     }
 };
 
+// TODO make_unique
 #endif

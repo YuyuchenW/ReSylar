@@ -1,5 +1,5 @@
 #include "log.hpp"
-
+#include <cstdarg>
 namespace sylar
 {
 
@@ -144,15 +144,7 @@ namespace sylar
         std::string m_format;
     };
 
-    class ElapseFormatItem : public LogFormatter::FormatterItem
-    {
-    public:
-        ElapseFormatItem(const std::string &str = "") {}
-        void format(std::ostream &os, LogEvent::ptr event) override
-        {
-            os << event->getElapse();
-        }
-    };
+
 
     class FileNameFormatItem : public LogFormatter::FormatterItem
     {
@@ -518,5 +510,98 @@ namespace sylar
         return !m_reopenError;
     }
 
-    
+    Logger::Logger(const std::string &name)
+        : m_name(name), m_level(LogLevel::INFO), m_createTime(GetElapsedMS())
+    {
+    }
+
+    void Logger::addAppender(LogAppender::ptr appender)
+    {
+        MutexType::Lock lock(m_mutex);
+        m_appenders.push_back(appender);
+    }
+
+    void Logger::delAppender(LogAppender::ptr appender)
+    {
+        MutexType::Lock lock(m_mutex);
+        for (auto it = m_appenders.begin(); it != m_appenders.end(); ++it)
+        {
+            if (*it == appender)
+            {
+                m_appenders.erase(it);
+                break;
+            }
+        }
+    }
+
+    void Logger::clearAppenders()
+    {
+        MutexType::Lock lock(m_mutex);
+        m_appenders.clear();
+    }
+
+    void Logger::log(LogEvent::ptr event)
+    {
+        if (event->getLevel() <= m_level)
+        {
+            for (auto &i : m_appenders)
+            {
+                i->log(event);
+            }
+        }
+    }
+
+    std::string Logger::toYamlString()
+    {
+        std::stringstream ss;
+        ss << "name: " << m_name << std::endl;
+        ss << "level: " << LogLevel::ToString(m_level) << std::endl;
+        ss << "appenders: " << std::endl;
+        for (auto &i : m_appenders)
+        {
+            ss << i->toYamlString() << std::endl;
+        }
+        return ss.str();
+    }
+
+    LoggerWrap::LoggerWrap(Logger::ptr logger, LogEvent::ptr event) : m_logger(logger), m_event(event)
+    {
+    }
+
+    LoggerWrap::~LoggerWrap()
+    {
+        m_logger->log(m_event);
+    }
+
+    LogManager::LogManager()
+    {
+        m_root.reset(new Logger("root"));
+        m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
+        m_loggers[m_root->getName()] = m_root;
+        init();
+    }
+
+    Logger::ptr LogManager::getLogger(const std::string &name)
+    {
+        MutexType::Lock lock(m_mutex);
+        auto it = m_loggers.find(name);
+        if (it != m_loggers.end())
+        {
+            return it->second;
+        }
+
+        Logger::ptr logger(new Logger(name));
+        m_loggers[name] = logger;
+        return logger;
+    }
+
+    // TODO 实现从配置文件加载日志配置
+    void LogManager::init()
+    {
+    }
+
+    std::string LogManager::toYamlString()
+    {
+        return std::string();
+    }
 }

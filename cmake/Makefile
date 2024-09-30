@@ -117,24 +117,148 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named unique_ptr
+# Target rules for targets named Logger
 
 # Build rule for target.
-unique_ptr: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unique_ptr
-.PHONY : unique_ptr
+Logger: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Logger
+.PHONY : Logger
 
 # fast build rule for target.
-unique_ptr/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unique_ptr.dir/build.make CMakeFiles/unique_ptr.dir/build
-.PHONY : unique_ptr/fast
+Logger/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Logger.dir/build.make CMakeFiles/Logger.dir/build
+.PHONY : Logger/fast
+
+#=============================================================================
+# Target rules for targets named Utility
+
+# Build rule for target.
+Utility: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Utility
+.PHONY : Utility
+
+# fast build rule for target.
+Utility/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/build
+.PHONY : Utility/fast
+
+#=============================================================================
+# Target rules for targets named ptr_test
+
+# Build rule for target.
+ptr_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ptr_test
+.PHONY : ptr_test
+
+# fast build rule for target.
+ptr_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ptr_test.dir/build.make CMakeFiles/ptr_test.dir/build
+.PHONY : ptr_test/fast
+
+#=============================================================================
+# Target rules for targets named shared_ptr_test
+
+# Build rule for target.
+shared_ptr_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 shared_ptr_test
+.PHONY : shared_ptr_test
+
+# fast build rule for target.
+shared_ptr_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/shared_ptr_test.dir/build.make CMakeFiles/shared_ptr_test.dir/build
+.PHONY : shared_ptr_test/fast
+
+#=============================================================================
+# Target rules for targets named test_logger
+
+# Build rule for target.
+test_logger: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_logger
+.PHONY : test_logger
+
+# fast build rule for target.
+test_logger/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_logger.dir/build.make CMakeFiles/test_logger.dir/build
+.PHONY : test_logger/fast
+
+Logger/log.o: Logger/log.cc.o
+.PHONY : Logger/log.o
+
+# target to build an object file
+Logger/log.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Logger.dir/build.make CMakeFiles/Logger.dir/Logger/log.cc.o
+.PHONY : Logger/log.cc.o
+
+Logger/log.i: Logger/log.cc.i
+.PHONY : Logger/log.i
+
+# target to preprocess a source file
+Logger/log.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Logger.dir/build.make CMakeFiles/Logger.dir/Logger/log.cc.i
+.PHONY : Logger/log.cc.i
+
+Logger/log.s: Logger/log.cc.s
+.PHONY : Logger/log.s
+
+# target to generate assembly for a file
+Logger/log.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Logger.dir/build.make CMakeFiles/Logger.dir/Logger/log.cc.s
+.PHONY : Logger/log.cc.s
+
+Utility/cmutex.o: Utility/cmutex.cc.o
+.PHONY : Utility/cmutex.o
+
+# target to build an object file
+Utility/cmutex.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/Utility/cmutex.cc.o
+.PHONY : Utility/cmutex.cc.o
+
+Utility/cmutex.i: Utility/cmutex.cc.i
+.PHONY : Utility/cmutex.i
+
+# target to preprocess a source file
+Utility/cmutex.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/Utility/cmutex.cc.i
+.PHONY : Utility/cmutex.cc.i
+
+Utility/cmutex.s: Utility/cmutex.cc.s
+.PHONY : Utility/cmutex.s
+
+# target to generate assembly for a file
+Utility/cmutex.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/Utility/cmutex.cc.s
+.PHONY : Utility/cmutex.cc.s
+
+Utility/util.o: Utility/util.cpp.o
+.PHONY : Utility/util.o
+
+# target to build an object file
+Utility/util.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/Utility/util.cpp.o
+.PHONY : Utility/util.cpp.o
+
+Utility/util.i: Utility/util.cpp.i
+.PHONY : Utility/util.i
+
+# target to preprocess a source file
+Utility/util.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/Utility/util.cpp.i
+.PHONY : Utility/util.cpp.i
+
+Utility/util.s: Utility/util.cpp.s
+.PHONY : Utility/util.s
+
+# target to generate assembly for a file
+Utility/util.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Utility.dir/build.make CMakeFiles/Utility.dir/Utility/util.cpp.s
+.PHONY : Utility/util.cpp.s
 
 test/ptr_test.o: test/ptr_test.cpp.o
 .PHONY : test/ptr_test.o
 
 # target to build an object file
 test/ptr_test.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unique_ptr.dir/build.make CMakeFiles/unique_ptr.dir/test/ptr_test.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ptr_test.dir/build.make CMakeFiles/ptr_test.dir/test/ptr_test.cpp.o
 .PHONY : test/ptr_test.cpp.o
 
 test/ptr_test.i: test/ptr_test.cpp.i
@@ -142,7 +266,7 @@ test/ptr_test.i: test/ptr_test.cpp.i
 
 # target to preprocess a source file
 test/ptr_test.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unique_ptr.dir/build.make CMakeFiles/unique_ptr.dir/test/ptr_test.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ptr_test.dir/build.make CMakeFiles/ptr_test.dir/test/ptr_test.cpp.i
 .PHONY : test/ptr_test.cpp.i
 
 test/ptr_test.s: test/ptr_test.cpp.s
@@ -150,8 +274,56 @@ test/ptr_test.s: test/ptr_test.cpp.s
 
 # target to generate assembly for a file
 test/ptr_test.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unique_ptr.dir/build.make CMakeFiles/unique_ptr.dir/test/ptr_test.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ptr_test.dir/build.make CMakeFiles/ptr_test.dir/test/ptr_test.cpp.s
 .PHONY : test/ptr_test.cpp.s
+
+test/shared_ptr_test.o: test/shared_ptr_test.cpp.o
+.PHONY : test/shared_ptr_test.o
+
+# target to build an object file
+test/shared_ptr_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/shared_ptr_test.dir/build.make CMakeFiles/shared_ptr_test.dir/test/shared_ptr_test.cpp.o
+.PHONY : test/shared_ptr_test.cpp.o
+
+test/shared_ptr_test.i: test/shared_ptr_test.cpp.i
+.PHONY : test/shared_ptr_test.i
+
+# target to preprocess a source file
+test/shared_ptr_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/shared_ptr_test.dir/build.make CMakeFiles/shared_ptr_test.dir/test/shared_ptr_test.cpp.i
+.PHONY : test/shared_ptr_test.cpp.i
+
+test/shared_ptr_test.s: test/shared_ptr_test.cpp.s
+.PHONY : test/shared_ptr_test.s
+
+# target to generate assembly for a file
+test/shared_ptr_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/shared_ptr_test.dir/build.make CMakeFiles/shared_ptr_test.dir/test/shared_ptr_test.cpp.s
+.PHONY : test/shared_ptr_test.cpp.s
+
+test/test_logger.o: test/test_logger.cc.o
+.PHONY : test/test_logger.o
+
+# target to build an object file
+test/test_logger.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_logger.dir/build.make CMakeFiles/test_logger.dir/test/test_logger.cc.o
+.PHONY : test/test_logger.cc.o
+
+test/test_logger.i: test/test_logger.cc.i
+.PHONY : test/test_logger.i
+
+# target to preprocess a source file
+test/test_logger.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_logger.dir/build.make CMakeFiles/test_logger.dir/test/test_logger.cc.i
+.PHONY : test/test_logger.cc.i
+
+test/test_logger.s: test/test_logger.cc.s
+.PHONY : test/test_logger.s
+
+# target to generate assembly for a file
+test/test_logger.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_logger.dir/build.make CMakeFiles/test_logger.dir/test/test_logger.cc.s
+.PHONY : test/test_logger.cc.s
 
 # Help Target
 help:
@@ -161,10 +333,29 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... unique_ptr"
+	@echo "... Logger"
+	@echo "... Utility"
+	@echo "... ptr_test"
+	@echo "... shared_ptr_test"
+	@echo "... test_logger"
+	@echo "... Logger/log.o"
+	@echo "... Logger/log.i"
+	@echo "... Logger/log.s"
+	@echo "... Utility/cmutex.o"
+	@echo "... Utility/cmutex.i"
+	@echo "... Utility/cmutex.s"
+	@echo "... Utility/util.o"
+	@echo "... Utility/util.i"
+	@echo "... Utility/util.s"
 	@echo "... test/ptr_test.o"
 	@echo "... test/ptr_test.i"
 	@echo "... test/ptr_test.s"
+	@echo "... test/shared_ptr_test.o"
+	@echo "... test/shared_ptr_test.i"
+	@echo "... test/shared_ptr_test.s"
+	@echo "... test/test_logger.o"
+	@echo "... test/test_logger.i"
+	@echo "... test/test_logger.s"
 .PHONY : help
 
 
